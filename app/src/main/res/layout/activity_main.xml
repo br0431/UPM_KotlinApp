@@ -8,6 +8,23 @@
     tools:context=".MainActivity"
     tools:visibility="visible">
 
+    <Button
+        android:id="@+id/mainToSecondButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="261dp"
+        android:text="Go to second activity"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.611"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -23,20 +40,18 @@
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/mainToSecondButton"
+        android:id="@+id/mainToThirdButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="232dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="261dp"
-        android:text="Go tosecond activity"
+        android:layout_marginBottom="262dp"
+        android:text="Go to third activity"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.611"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
