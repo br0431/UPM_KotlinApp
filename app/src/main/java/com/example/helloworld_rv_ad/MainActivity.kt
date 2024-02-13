@@ -9,6 +9,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.TextView
@@ -18,12 +19,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "mainTag"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d(TAG, "onCreate: The activity is being created.")
         val buttonNext: Button = findViewById(R.id.mainToSecondButton)
         val secondButton: Button = findViewById(R.id.mainToThirdButton)
+        val thirdButton: Button = findViewById(R.id.mainToMapButton)
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
@@ -31,6 +34,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
         secondButton.setOnClickListener {
             val intent2 = Intent(this, ThirdActivity::class.java)
             startActivity(intent2)
+        }
+        thirdButton.setOnClickListener {
+          val intent3 = Intent(this, OpenStreetMapsActivity::class.java)
+            startActivity(intent3)
         }
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
