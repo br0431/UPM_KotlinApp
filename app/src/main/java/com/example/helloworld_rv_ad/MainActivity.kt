@@ -15,7 +15,7 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 
 class MainActivity : AppCompatActivity(), LocationListener {
-    private val TAG = "btaMainActivity"
+    private val TAG = "mainTag"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     override fun onCreate(savedInstanceState: Bundle?) {
