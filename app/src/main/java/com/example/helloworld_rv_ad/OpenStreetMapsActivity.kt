@@ -22,7 +22,6 @@ class OpenStreetMapsActivity : AppCompatActivity() {
             Log.i(TAG, "onCreate: Location["+location.altitude+"]["+location.latitude+"]["+location.longitude+"][")
 
             Configuration.getInstance().load(applicationContext, getSharedPreferences("osm", MODE_PRIVATE))
-
             map = findViewById(R.id.mapView)
             map.setTileSource(TileSourceFactory.MAPNIK)
 
@@ -42,4 +41,5 @@ class OpenStreetMapsActivity : AppCompatActivity() {
         super.onPause()
         map.onPause()
     }
+
 }

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "mainTag"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    private var latestLocation: Location? = null
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +37,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
             startActivity(intent2)
         }
         thirdButton.setOnClickListener {
-          val intent3 = Intent(this, OpenStreetMapsActivity::class.java)
-            startActivity(intent3)
+            if (latestLocation != null) {
+                val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                val bundle = Bundle()
+                bundle.putParcelable("location", latestLocation)
+                intent.putExtra("locationBundle", bundle)
+                startActivity(intent)
+            }else{
+                Log.e(TAG, "Location not set yet.")
+            }
         }
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -76,6 +84,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onLocationChanged(location: Location) {
         val textView: TextView = findViewById(R.id.gpsText)
         textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+        latestLocation= location
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
