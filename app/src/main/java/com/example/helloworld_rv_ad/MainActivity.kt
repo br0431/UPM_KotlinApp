@@ -14,6 +14,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
+import android.widget.Toast
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import java.io.File
+
 
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "mainTag"
@@ -28,6 +33,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val buttonNext: Button = findViewById(R.id.mainToSecondButton)
         val secondButton: Button = findViewById(R.id.mainToThirdButton)
         val thirdButton: Button = findViewById(R.id.mainToMapButton)
+        val userIdentifier = getUserIdentifier()
+        if (userIdentifier == null) {
+            askForUserIdentifier()
+        } else {
+            Toast.makeText(this, "User ID: $userIdentifier", Toast.LENGTH_LONG).show()
+        }
+
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
@@ -49,7 +61,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        // Check for location permissions
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -64,8 +75,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 locationPermissionCode
             )
         } else {
-            // The location is updated every 5000 milliseconds (or 5 seconds) and/or if the device moves more than 5 meters,
-            // whichever happens first
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
         }
     }
@@ -82,10 +92,50 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        val textView: TextView = findViewById(R.id.gpsText)
-        textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
         latestLocation= location
+        val textView: TextView = findViewById(R.id.gpsText)
+        Toast.makeText(this, "Coordinates update! [${location.latitude}][${location.longitude}]", Toast.LENGTH_LONG).show()
+        textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+        saveCoordinatesToFile(location.latitude, location.longitude)
+
     }
+    private fun askForUserIdentifier() {
+        val input = EditText(this)
+        AlertDialog.Builder(this)
+            .setTitle("Enter User Identifier")
+            .setIcon(R.mipmap.ic_launcher)
+            .setView(input)
+            .setPositiveButton("Save") { dialog, which ->
+                val userInput = input.text.toString()
+                if (userInput.isNotBlank()) {
+                    Toast.makeText(this, "User ID saved: $userInput", Toast.LENGTH_LONG).show()
+                    saveUserIdentifier(userInput)
+                } else {
+                    Toast.makeText(this, "User ID cannot be blank", Toast.LENGTH_LONG).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    private fun saveUserIdentifier(userIdentifier: String) {
+        val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply {
+            putString("userIdentifier", userIdentifier)
+            apply()
+        }
+    }
+    private fun getUserIdentifier(): String? {
+        val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        return sharedPreferences.getString("userIdentifier", null)
+    }
+    private fun saveCoordinatesToFile(latitude: Double, longitude: Double) {
+        val fileName = "gps_coordinates.csv"
+        val file = File(filesDir, fileName)
+        val timestamp = System.currentTimeMillis()
+        file.appendText("$timestamp;$latitude;$longitude\n")
+    }
+
+
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
     override fun onProviderEnabled(provider: String) {}

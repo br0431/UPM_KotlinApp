@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_light_background"
     android:visibility="visible"
     tools:context=".MainActivity"
     tools:visibility="visible">
@@ -16,6 +17,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="261dp"
         android:text="Go to second activity"
+        android:textColorHighlight="#C940D8"
+        android:textColorLink="#D657DF"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
