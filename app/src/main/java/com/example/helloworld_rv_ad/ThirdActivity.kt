@@ -1,8 +1,10 @@
 package com.example.helloworld_rv_ad
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 
 class ThirdActivity : AppCompatActivity() {
@@ -19,5 +21,14 @@ class ThirdActivity : AppCompatActivity() {
             val intent2 = Intent(this, SecondActivity::class.java)
             startActivity(intent2)
         }
+        val latitude = intent.getStringExtra("latitude")
+        val longitude = intent.getStringExtra("longitude")
+        Log.d(TAG, "Latitude: $latitude, Longitude: $longitude")
+        val buttonPrevious: Button = findViewById(R.id.ThirdToSecondActivity)
+        buttonPrevious.setOnClickListener {
+            val intent = Intent(this, SecondActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
