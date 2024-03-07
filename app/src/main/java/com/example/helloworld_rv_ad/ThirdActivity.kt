@@ -11,12 +11,8 @@ class ThirdActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)
-        val latitude = intent.getStringExtra("latitude")
-        val longitude = intent.getStringExtra("longitude")
-        Log.d(TAG, "Latitude: $latitude, Longitude: $longitude")
         val buttonNext: Button = findViewById(R.id.ThirdToMainButton)
         val secondButton: Button = findViewById(R.id.ThirdToSecondActivity)
-
         buttonNext.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -24,6 +20,14 @@ class ThirdActivity : AppCompatActivity() {
         secondButton.setOnClickListener {
             val intent2 = Intent(this, SecondActivity::class.java)
             startActivity(intent2)
+        }
+        val latitude = intent.getStringExtra("latitude")
+        val longitude = intent.getStringExtra("longitude")
+        Log.d(TAG, "Latitude: $latitude, Longitude: $longitude")
+        val buttonPrevious: Button = findViewById(R.id.ThirdToSecondActivity)
+        buttonPrevious.setOnClickListener {
+            val intent = Intent(this, SecondActivity::class.java)
+            startActivity(intent)
         }
 
     }

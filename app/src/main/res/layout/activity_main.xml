@@ -17,24 +17,24 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="261dp"
         android:text="Go to second activity"
-        android:textColorHighlight="#C940D8"
-        android:textColorLink="#D657DF"
+        android:textColorHighlight="@color/pink"
+        android:textColorLink="@color/pink"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.611"
+        app:layout_constraintVertical_bias="0.602"
         tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World Rodrigo Valiente and Alexandru Dolea"
+        android:text="Rodrigo Valiente and Alexandru Dolea"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,14 +46,14 @@
         android:id="@+id/mainToThirdButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="232dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="262dp"
+        android:layout_marginStart="00dp"
+        android:layout_marginEnd="00dp"
+        android:layout_marginBottom="276dp"
         android:text="Go to third activity"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
@@ -68,22 +68,48 @@
         app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textSize="15sp"
         app:layout_constraintVertical_bias="0.601" />
 
     <Button
         android:id="@+id/mainToMapButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="266dp"
+        android:layout_marginStart="00dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="153dp"
-        android:text="Go to Map"
+        android:text=" Map"
+
+        android:textColorLink="@color/pink"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainToThirdButton"
+        app:layout_constraintVertical_bias="0.0"
         tools:visibility="visible" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/app_name"
+        tools:layout_editor_absoluteX="-15dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

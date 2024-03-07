@@ -1,9 +1,9 @@
 package com.example.helloworld_rv_ad
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
+import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,39 +15,71 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SecondActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
+    private val TAG = "btaSecondActivity"
+    private var latestLocation: Location? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
-        val buttonNext: Button = findViewById(R.id.SecondToMainButton)
-        val secondButton: Button = findViewById(R.id.SecondToThirdButton)
+        Log.d(TAG, "onCreate: The activity is being created.");
+        val buttonNext: Button = findViewById(R.id.SecondToThirdButton)
         buttonNext.setOnClickListener {
+            val intent = Intent(this, ThirdActivity::class.java)
+            startActivity(intent)
+        }
+        val buttonPrevious: Button = findViewById(R.id.SecondToMainButton)
+        buttonPrevious.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        secondButton.setOnClickListener {
-            val intent2 = Intent(this, ThirdActivity::class.java)
-            startActivity(intent2)
-        }
-        val listView: ListView = findViewById(R.id.lvFileContents)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, readFileLines())
-        listView.adapter = adapter
 
-        val listView2: ListView = findViewById(R.id.lvCoordinates)
+
+        val listView: ListView = findViewById(R.id.lvCoordinates)
         val headerView = layoutInflater.inflate(R.layout.listview_header, listView, false)
         listView.addHeaderView(headerView, null, false)
         // Create adapter of coordiantes. See class below
-        val adapter2 = CoordinatesAdapter(this, readFileContents())
+        val adapter = CoordinatesAdapter(this, readFileContents())
         listView.adapter = adapter
-
+        // ButtomNavigationMenu
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.navigation_map -> {
+                    if (latestLocation != null) {
+                        val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putParcelable("location", latestLocation)
+                        intent.putExtra("locationBundle", bundle)
+                        startActivity(intent)
+                    }else{
+                        Log.e(TAG, "Location not set yet.")
+                    }
+                    true
+                }
+                R.id.navigation_list -> {
+                    val intent = Intent(this, SecondActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
     }
-
-    private class CoordinatesAdapter(context: Context, private val coordinatesList: List<List<String>>) :
+    private class CoordinatesAdapter(
+        context: Context,
+        private val coordinatesList: List<List<String>>
+    ) :
         ArrayAdapter<List<String>>(context, R.layout.listview_item, coordinatesList) {
         private val inflater: LayoutInflater = LayoutInflater.from(context)
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -55,7 +87,7 @@ class SecondActivity : AppCompatActivity() {
             val timestampTextView: TextView = view.findViewById(R.id.tvTimestamp)
             val latitudeTextView: TextView = view.findViewById(R.id.tvLatitude)
             val longitudeTextView: TextView = view.findViewById(R.id.tvLongitude)
-            try{
+            try {
                 val item = coordinatesList[position]
                 timestampTextView.text = formatTimestamp(item[0].toLong())
                 latitudeTextView.text = formatCoordinate(item[1].toDouble())
@@ -83,6 +115,7 @@ class SecondActivity : AppCompatActivity() {
             return String.format("%.6f", value)
         }
     }
+
     private fun readFileContents(): List<List<String>> {
         val fileName = "gps_coordinates.csv"
         return try {
@@ -93,14 +126,4 @@ class SecondActivity : AppCompatActivity() {
             listOf(listOf("Error reading file: ${e.message}"))
         }
     }
-    private fun readFileLines(): List<String> {
-        val fileName = "gps_coordinates.csv"
-        return try {
-            openFileInput(fileName).bufferedReader().readLines()
-        } catch (e: IOException) {
-            listOf("Error reading file: ${e.message}")
-        }
-    }
-
 }
-
