@@ -3,7 +3,6 @@ package com.example.helloworld_rv_ad
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
