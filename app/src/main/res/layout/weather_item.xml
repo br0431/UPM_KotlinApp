@@ -1,0 +1,101 @@
+<!-- res/layout/weather_item.xml -->
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvCityName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="City Name"/>
+
+
+        <TextView
+            android:id="@+id/tvTemperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCityName"
+            android:layout_marginTop="8dp"
+            android:text="Temperature"/>
+
+        <TextView
+            android:id="@+id/tvTemperatureFeelsLike"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTemperature"
+            android:layout_marginTop="8dp"
+            android:text="Feels Like"/>
+
+    <TextView
+        android:id="@+id/tvTemperatureMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTemperatureFeelsLike"
+        android:layout_marginTop="8dp"
+        android:text="Temperature Max"/>
+    <TextView
+        android:id="@+id/tvTemperatureMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTemperatureMax"
+        android:layout_marginTop="8dp"
+        android:text="Temperature Min"/>
+    <TextView
+        android:id="@+id/tvHumidity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTemperatureMin"
+        android:layout_marginTop="8dp"
+        android:text="Humidity"/>
+    <TextView
+        android:id="@+id/tvWindSpeed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHumidity"
+        android:layout_marginTop="8dp"
+        android:text="Wind Speed"/>
+    <TextView
+        android:id="@+id/tvWeatherMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWindSpeed"
+        android:layout_marginTop="8dp"
+        android:text="Weather Main"/>
+    <!-- res/layout/weather_icon.xml -->
+
+    <ImageView
+        android:id="@+id/ivWeatherIcon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWindSpeed"
+        android:layout_marginTop="8dp" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
