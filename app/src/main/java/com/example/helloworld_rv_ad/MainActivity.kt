@@ -22,6 +22,12 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import com.example.helloworld_rv_ad.room.AppDatabase
+import com.example.helloworld_rv_ad.room.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), LocationListener {
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     private var latestLocation: Location? = null
+    lateinit var database: AppDatabase
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +45,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val secondButton: Button = findViewById(R.id.mainToThirdButton)
         val thirdButton: Button = findViewById(R.id.mainToMapButton)
         val userIdentifier = getUserIdentifier()
+        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "coordinates").build()
         if (userIdentifier == null) {
             askForUserIdentifier()
         } else {
@@ -153,7 +161,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val textView: TextView = findViewById(R.id.gpsText)
         Toast.makeText(this, "Coordinates update! [${location.latitude}][${location.longitude}]", Toast.LENGTH_LONG).show()
         textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-        saveCoordinatesToFile(location.latitude, location.longitude)
+        val newLocation = User(
+            latitude = location.latitude,
+            longitude = location.longitude,
+            timestamp = System.currentTimeMillis()
+        )
+        lifecycleScope.launch(Dispatchers.IO) {
+            database.locationDao().insertLocation(newLocation)
+        }
+
 
     }
     private fun askForUserIdentifier() {
