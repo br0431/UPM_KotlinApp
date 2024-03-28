@@ -30,7 +30,8 @@ class SecondActivity : AppCompatActivity() {
     private var latestLocation: Location? = null
     private lateinit var database: AppDatabase
     private lateinit var adapter: CoordinatesAdapter
-    val listView: ListView = findViewById(R.id.lvCoordinates)
+    private lateinit var listView: ListView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +47,7 @@ class SecondActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
-
+        val listView: ListView = findViewById(R.id.lvCoordinates)
         val headerView = layoutInflater.inflate(R.layout.listview_header, listView, false)
         listView.addHeaderView(headerView, null, false)
         // Create adapter of coordiantes. See class below

@@ -1,78 +1,90 @@
 package com.example.helloworld_rv_ad
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.view.Menu
-import android.view.MenuItem
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import android.widget.Toast
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.io.File
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.helloworld_rv_ad.room.AppDatabase
 import com.example.helloworld_rv_ad.room.User
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), LocationListener {
-    private val TAG = "mainTag"
+    private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
-    private val locationPermissionCode = 2
     private var latestLocation: Location? = null
+    private val locationPermissionCode = 2
     lateinit var database: AppDatabase
-    @SuppressLint("MissingInflatedId")
+
+    @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         Log.d(TAG, "onCreate: The activity is being created.")
-        val buttonNext: Button = findViewById(R.id.mainToSecondButton)
-        val secondButton: Button = findViewById(R.id.mainToThirdButton)
-        val thirdButton: Button = findViewById(R.id.mainToMapButton)
+        println("Hello world to test System.out standard output!")
+
+        // ButtomNavigationMenu
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView.setOnNavigationItemSelectedListener { item ->
+            val currentActivity = this::class.java.simpleName
+            when (item.itemId) {
+                R.id.navigation_home -> if (currentActivity != MainActivity::class.java.simpleName) {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                R.id.navigation_map -> if (currentActivity != OpenStreetMapsActivity::class.java.simpleName) {
+                    if (latestLocation != null) {
+                        val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                        val bundle = Bundle()
+                        bundle.putParcelable("location", latestLocation)
+                        intent.putExtra("locationBundle", bundle)
+                        startActivity(intent)
+                    }else{
+                        Log.e(TAG, "Location not set yet.")
+                        startActivity(Intent(this, OpenStreetMapsActivity::class.java))
+                    }
+                    true
+                }
+                R.id.navigation_list -> if (currentActivity != SecondActivity::class.java.simpleName) {
+                    startActivity(Intent(this, SecondActivity::class.java))
+                }
+            }
+            true
+        }
+
+        // Configure Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Shared prefs. Check if the user identifier is already saved
         val userIdentifier = getUserIdentifier()
-        database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "coordinates").build()
         if (userIdentifier == null) {
             askForUserIdentifier()
         } else {
             Toast.makeText(this, "User ID: $userIdentifier", Toast.LENGTH_LONG).show()
         }
 
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
-        }
-        secondButton.setOnClickListener {
-            val intent2 = Intent(this, ThirdActivity::class.java)
-            startActivity(intent2)
-        }
-        thirdButton.setOnClickListener {
-            if (latestLocation != null) {
-                val intent = Intent(this, OpenStreetMapsActivity::class.java)
-                val bundle = Bundle()
-                bundle.putParcelable("location", latestLocation)
-                intent.putExtra("locationBundle", bundle)
-                startActivity(intent)
-            }else{
-                Log.e(TAG, "Location not set yet.")
-            }
-        }
+        // Location manager init and permisssons
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -87,60 +99,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 locationPermissionCode
             )
         } else {
-
+            // The location is updated every 5000 milliseconds (or 5 seconds) and/or if the device moves more than 5 meters,
+            // whichever happens first
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
         }
-        // ButtomNavigationMenu
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.navigation_map -> {
-                    if (latestLocation != null) {
-                        val intent = Intent(this, OpenStreetMapsActivity::class.java)
-                        val bundle = Bundle()
-                        bundle.putParcelable("location", latestLocation)
-                        intent.putExtra("locationBundle", bundle)
-                        startActivity(intent)
-                    }else{
-                        Log.e(TAG, "Location not set yet.")
-                    }
-                    true
-                }
-                R.id.navigation_list -> {
-                    val intent = Intent(this, SecondActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                else -> false
-            }
+        // Room database init
+        try {
+            database = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "coordinates").fallbackToDestructiveMigration().build()
+        }catch (e: Exception){
+            Log.e(TAG,"ERROR EN LA CREACION DE LA BASE DE DATOS")
         }
-
-        // Configure Toolbar
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
-    }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    class SettingsActivity : AppCompatActivity(){
 
 
     }
@@ -157,10 +125,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        latestLocation= location
-        val textView: TextView = findViewById(R.id.gpsText)
+        latestLocation = location
+        val textView: TextView = findViewById(R.id.textView)
+        textView.text = "\uD83D\uDCCD Latitude: [${location.latitude}], Longitude: [${location.longitude}], UserId: [${getUserIdentifier()}]"
         Toast.makeText(this, "Coordinates update! [${location.latitude}][${location.longitude}]", Toast.LENGTH_LONG).show()
-        textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+
+        // save coordinates to room databse
         val newLocation = User(
             latitude = location.latitude,
             longitude = location.longitude,
@@ -169,20 +139,24 @@ class MainActivity : AppCompatActivity(), LocationListener {
         lifecycleScope.launch(Dispatchers.IO) {
             database.locationDao().insertLocation(newLocation)
         }
-
-
     }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+    override fun onProviderEnabled(provider: String) {}
+    override fun onProviderDisabled(provider: String) {}
+
+
     private fun askForUserIdentifier() {
         val input = EditText(this)
         AlertDialog.Builder(this)
             .setTitle("Enter User Identifier")
-            .setIcon(R.mipmap.ic_launcher)
+            .setIcon(R.drawable.ic_launcher_foreground)
             .setView(input)
             .setPositiveButton("Save") { dialog, which ->
                 val userInput = input.text.toString()
                 if (userInput.isNotBlank()) {
-                    Toast.makeText(this, "User ID saved: $userInput", Toast.LENGTH_LONG).show()
                     saveUserIdentifier(userInput)
+                    Toast.makeText(this, "User ID saved: $userInput", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "User ID cannot be blank", Toast.LENGTH_LONG).show()
                 }
@@ -190,6 +164,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             .setNegativeButton("Cancel", null)
             .show()
     }
+
     private fun saveUserIdentifier(userIdentifier: String) {
         val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         sharedPreferences.edit().apply {
@@ -197,24 +172,28 @@ class MainActivity : AppCompatActivity(), LocationListener {
             apply()
         }
     }
+
     private fun getUserIdentifier(): String? {
         val sharedPreferences = this.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
         return sharedPreferences.getString("userIdentifier", null)
     }
-    private fun saveCoordinatesToFile(latitude: Double, longitude: Double) {
-        val fileName = "gps_coordinates.csv"
-        val file = File(filesDir, fileName)
-        val timestamp = System.currentTimeMillis()
-        file.appendText("$timestamp;$latitude;$longitude\n")
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 
-
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-    override fun onProviderEnabled(provider: String) {}
-    override fun onProviderDisabled(provider: String) {}
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsView::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
+
+}
 
 
 

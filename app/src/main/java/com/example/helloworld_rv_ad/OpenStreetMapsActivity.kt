@@ -15,12 +15,17 @@ class OpenStreetMapsActivity : AppCompatActivity() {
     private val TAG = "openSreetMapTag"
     private lateinit var map: MapView
     private lateinit var startPoint:GeoPoint
+    private lateinit var endPoint: GeoPoint
     val gymkhanaCoords = listOf(
         GeoPoint(40.38779608214728, -3.627687914352839), // Tennis
         GeoPoint(40.38788595319803, -3.627048250272035), // Futsal outdoors
         GeoPoint(40.38847548693242, -3.626631851734613), // Polideportivo
         GeoPoint(40.388422047110225, -3.6270194804957954), // Club lucha
-        GeoPoint(40.38255074195828, -3.6336136612427956) // Polideportivo Palomeras
+        GeoPoint(40.38255074195828, -3.6336136612427956), // Polideportivo Palomeras
+        GeoPoint(40.390145278568575, -3.6331844756708445), // campo de futbol
+        GeoPoint(40.38927908176764, -3.6399114559463994),// gimnasio olympo
+        GeoPoint(40.38371450404913, -3.644601269534232),// rocodromo
+        GeoPoint(40.381160768449526, -3.623926618537384) //detroit boxing
 
     )
     val gymkhanaNames = listOf(
@@ -28,7 +33,11 @@ class OpenStreetMapsActivity : AppCompatActivity() {
         "Futsal outdoors",
         "Sports Center UPM",
         "Fight club",
-        "Sports Center Palomeras"
+        "Sports Center Palomeras",
+        "Football Pitch",
+        "Olympo GYM",
+        "Climbing place",
+        "Detroit boxing club"
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +53,9 @@ class OpenStreetMapsActivity : AppCompatActivity() {
             map.setTileSource(TileSourceFactory.MAPNIK)
             map.controller.setZoom(15.0)
             startPoint = GeoPoint(40.3893, -3.6298)
+            endPoint = GeoPoint(40.381968652661556, -3.6247002562272868)
             addMarker(startPoint, "My current location")
+            addMarker(endPoint,"End of route ready to go home")
             addMarkersAndRoute(map,gymkhanaCoords,gymkhanaNames)
             //val startPoint = GeoPoint(40.416775, -3.703790) in case you want to test it mannualy
             map.controller.setCenter(startPoint)
