@@ -47,6 +47,11 @@ class SecondActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+        val buttonMap: Button = findViewById(R.id.SecondToMapButton)
+        buttonMap.setOnClickListener {
+            val intent = Intent(this, OpenStreetMapsActivity::class.java)
+            startActivity(intent)
+        }
         val listView: ListView = findViewById(R.id.lvCoordinates)
         val headerView = layoutInflater.inflate(R.layout.listview_header, listView, false)
         listView.addHeaderView(headerView, null, false)

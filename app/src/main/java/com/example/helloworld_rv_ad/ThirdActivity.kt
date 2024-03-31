@@ -1,5 +1,6 @@
 package com.example.helloworld_rv_ad
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -38,30 +39,20 @@ class ThirdActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)
-        val buttonNext: Button = findViewById(R.id.ThirdToMainButton)
-        val secondButton: Button = findViewById(R.id.ThirdToSecondActivity)
+
         val timestamp = intent.getLongExtra("timestamp", 0)
         val latitude = intent.getDoubleExtra("latitude", 40.475172)
         val longitude = intent.getDoubleExtra("longitude", -3.461757)
 
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        secondButton.setOnClickListener {
-            val intent2 = Intent(this, SecondActivity::class.java)
-            startActivity(intent2)
-        }
         val userIdentifier = getUserIdentifier()
         if (userIdentifier == null) {
             Toast.makeText(this, "User ID not set set. Request will not work", Toast.LENGTH_LONG)
                 .show()
         }
         Log.d(TAG, "Latitude: $latitude, Longitude: $longitude, Timestamp: $timestamp")
-
-        val buttonPrevious: Button = findViewById(R.id.ThirdToSecondActivity)
-        buttonPrevious.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
+        val buttonHome: Button = findViewById(R.id.HomeButton)
+        buttonHome.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
         val deleteButton: Button = findViewById(R.id.DeleteButton)
@@ -98,7 +89,7 @@ class ThirdActivity : AppCompatActivity() {
 
         // Initialize Retrofit to retrieve data from external web service
         initRetrofit()
-       //val recyclerView: RecyclerView = findViewById(R.id.recyclerViewWeather)
+        //val recyclerView: RecyclerView = findViewById(R.id.recyclerViewWeather)
         //recyclerView.layoutManager = LinearLayoutManager(this)
         weatherAdapter = WeatherAdapter(emptyList())
         //recyclerView.adapter = weatherAdapter
@@ -199,4 +190,3 @@ class ThirdActivity : AppCompatActivity() {
             }
     }
 }
-

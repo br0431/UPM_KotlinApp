@@ -51,11 +51,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         Log.d(TAG, "onCreate: The activity is being created.")
         println("Hello world to test System.out standard output!")
-        val buttonNext: Button = findViewById(R.id.mainToThirdActivity)
-        buttonNext.setOnClickListener {
-            val intentThird = Intent(this, ThirdActivity::class.java)
-            startActivity(intentThird)
-        }
+
 
         // ButtomNavigationMenu
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -162,7 +158,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onProviderDisabled(provider: String) {}
 
 
-    private fun askForUserIdentifier() {
+   private fun askForUserIdentifier() {
         val input = EditText(this)
         AlertDialog.Builder(this)
             .setTitle("Enter User Identifier")
@@ -266,6 +262,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onResume()
         updateUIWithUsername()
     }
+
+
 }
 
 

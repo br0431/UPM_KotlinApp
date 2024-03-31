@@ -7,5 +7,7 @@
     <string name="signed_in">Signed in!</string>
     <string name="signed_out">Signed out!</string>
     <string name="signed_cancelled">Signed in cancelled</string>
+    <string name="agregar_ubicaci_n">Agregar ubicación</string>
+    <string name="agregar_ubicacion" />
 
 </resources>

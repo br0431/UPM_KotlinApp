@@ -21,7 +21,7 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.157"
+        app:layout_constraintVertical_bias="0.213"
         tools:visibility="visible" />
 
     <TextView
@@ -34,23 +34,25 @@
         app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
     <TextView
         android:id="@+id/userNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="160dp"
         android:text="User Name"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="?android:attr/windowBackground"
+        android:layout_marginBottom="4dp"
+        android:background="@color/fui_bgAnonymous"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -61,7 +63,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/blue"
+        android:background="@color/azulClaro"
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/app_name"
         tools:layout_editor_absoluteX="-15dp" />
@@ -70,11 +72,12 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="272dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="304dp"
+        android:layout_marginBottom="60dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
+
         app:srcCompat="@drawable/ic_launcher_foreground"
         tools:visibility="visible" />
 
@@ -88,21 +91,12 @@
         android:layout_marginBottom="221dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintHorizontal_bias="0.474"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.489"
-        app:srcCompat="@mipmap/ic_launcher_monochrome" />
 
-    <Button
-        android:id="@+id/mainToThirdActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="-250dp"
-        android:layout_marginBottom="-500dp"
-        android:text="Third activity"
-        app:layout_constraintBottom_toTopOf="@+id/imageView4"
-        app:layout_constraintEnd_toStartOf="@+id/imageView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.419"
+        app:srcCompat="@mipmap/ic_launcher_monochrome" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
